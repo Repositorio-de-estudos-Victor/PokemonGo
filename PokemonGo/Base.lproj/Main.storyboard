@@ -38,6 +38,7 @@
                                 <state key="normal" image="pokeball"/>
                                 <connections>
                                     <action selector="abrirPokedex:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZC3-kF-aSE"/>
+                                    <segue destination="z92-nb-Uxa" kind="presentation" id="ZLa-mD-Pge"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -62,9 +63,65 @@
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="128.57142857142856"/>
         </scene>
+        <!--Poke Agenda View Controller-->
+        <scene sceneID="h9K-tJ-veG">
+            <objects>
+                <viewController id="z92-nb-Uxa" customClass="PokeAgendaViewController" customModule="PokemonGo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EWu-fX-odq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="o8G-1X-0Lv">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="pokemonCelula" id="9Xb-Bz-a3c">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9Xb-Bz-a3c" id="lIG-IO-uZn">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="z92-nb-Uxa" id="wgE-cR-OeL"/>
+                                    <outlet property="delegate" destination="z92-nb-Uxa" id="j5L-lN-XV8"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vkB-cY-NUV">
+                                <rect key="frame" x="182" y="748" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="KJf-dK-Htu"/>
+                                    <constraint firstAttribute="width" constant="50" id="Yna-zp-yct"/>
+                                </constraints>
+                                <state key="normal" image="map"/>
+                                <connections>
+                                    <action selector="voltarMapa:" destination="z92-nb-Uxa" eventType="touchUpInside" id="Kpx-CB-FtH"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="o8G-1X-0Lv" firstAttribute="leading" secondItem="yVp-2J-NcC" secondAttribute="leading" id="6si-UJ-u6X"/>
+                            <constraint firstItem="yVp-2J-NcC" firstAttribute="bottom" secondItem="vkB-cY-NUV" secondAttribute="bottom" constant="10" id="PLD-Bx-Bcw"/>
+                            <constraint firstItem="vkB-cY-NUV" firstAttribute="centerX" secondItem="EWu-fX-odq" secondAttribute="centerX" id="Q5L-5T-bQb"/>
+                            <constraint firstItem="o8G-1X-0Lv" firstAttribute="trailing" secondItem="yVp-2J-NcC" secondAttribute="trailing" id="bN5-Zz-sML"/>
+                            <constraint firstItem="o8G-1X-0Lv" firstAttribute="top" secondItem="yVp-2J-NcC" secondAttribute="top" id="eg8-4W-25l"/>
+                            <constraint firstAttribute="bottom" secondItem="o8G-1X-0Lv" secondAttribute="bottom" id="yjN-Nb-94L"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="yVp-2J-NcC"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="UrN-LI-vEX"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lLd-hh-98b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="853.62318840579712" y="128.57142857142856"/>
+        </scene>
     </scenes>
     <resources>
         <image name="compass" width="40" height="40"/>
+        <image name="map" width="40" height="40"/>
         <image name="pokeball" width="40" height="40"/>
     </resources>
 </document>

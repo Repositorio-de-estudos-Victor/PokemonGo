@@ -29,12 +29,17 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // Exibir Pokemons
         Timer.scheduledTimer(withTimeInterval: 8, repeats: true) { (timer) in
             if let coordenadas = self.gerenciadorLocalização.location?.coordinate {
-                let anotacao = MKPointAnnotation()
+                
+                let totalPokemons = UInt32(self.pokemons.count)
+                let indicePokemonAleatorio = arc4random_uniform(totalPokemons)
+                
+                let pokemon = self.pokemons[Int(indicePokemonAleatorio)]
+                
+                let anotacao = PokemonAnotacao(coordenadas: coordenadas, pokemon: pokemon)
                 
                 let latAleatoria = (Double(arc4random_uniform(400)) - 250) / 100000.0
                 let longAleatoria = (Double(arc4random_uniform(400)) - 250) / 100000.0
                 
-                anotacao.coordinate = coordenadas
                 anotacao.coordinate.latitude += latAleatoria
                 anotacao.coordinate.longitude += longAleatoria
                 
@@ -51,7 +56,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         if annotation is MKUserLocation {
             anotacaoView.image = #imageLiteral(resourceName: "player")
         }else {
-            anotacaoView.image = #imageLiteral(resourceName: "pikachu-2")
+            let pokemon = (annotation as! PokemonAnotacao).pokemon
+            
+            anotacaoView.image = UIImage(named: pokemon.nomeImagem!)
         }
         
         var frame = anotacaoView.frame
@@ -61,6 +68,50 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         anotacaoView.frame = frame
         
         return anotacaoView
+    }
+    
+    // Anotação selecionada
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        let anotacao = view.annotation
+        let pokemon = (anotacao as! PokemonAnotacao).pokemon
+//        let coordAnotacao = anotacao?.coordinate
+        
+        mapView.deselectAnnotation(anotacao, animated: true)
+        
+        if anotacao is MKUserLocation {
+            return
+        }
+        
+        if let coordAnotacao = anotacao?.coordinate {
+            let regiao = MKCoordinateRegion.init(center: coordAnotacao, latitudinalMeters: 200, longitudinalMeters: 200)
+            mapa.setRegion(regiao, animated: true)
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
+            
+            if let coord = self.gerenciadorLocalização.location?.coordinate {
+                
+                if mapView.visibleMapRect.contains(MKMapPoint.init(coord)) {
+                    self.coreDataPokemon.salvarPokemon(pokemon: pokemon)
+                    self.mapa.removeAnnotation(anotacao!)
+                    
+                    let alertController = UIAlertController(title: "Parabéns!", message: "Você capturou o pokémon \(pokemon.nome!)", preferredStyle: .alert)
+                    
+                    let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                    
+                    alertController.addAction(ok)
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    let alertController = UIAlertController(title: "Você não pode capturar!", message: "Você precisa se aproximar mais para capturar o \(pokemon.nome!)", preferredStyle: .alert)
+                    
+                    let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                    
+                    alertController.addAction(ok)
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+        
     }
     
     // Centralizar no mapa
@@ -115,6 +166,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         gerenciadorLocalização.startUpdatingLocation()
     }
     
+    // Centralizar o user
     func centralizar() {
         if let coordenadas = gerenciadorLocalização.location?.coordinate {
             let regiao = MKCoordinateRegion.init(center: coordenadas, latitudinalMeters: 200, longitudinalMeters: 200)
